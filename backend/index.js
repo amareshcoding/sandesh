@@ -1,8 +1,11 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const connectDB = require('./config/db');
 const app = express();
 dotenv.config();
 
+
+//
 app.get('/', (req, res) => {
   res.send('home route');
 });
@@ -22,9 +25,11 @@ app.get('/api/chat/:id', async (req, res) => {
   }
 });
 
+
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, async () => {
   try {
+    // connectDB();
     console.log(`server running on port ${PORT}`);
   } catch (err) {
     console.log(err.message);
