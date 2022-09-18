@@ -49,7 +49,7 @@ const Signup = () => {
         <InputGroup>
           <Input
             type={show ? 'text' : 'password'}
-            placeholder="Enter Your Name"
+            placeholder="Enter Your Password"
             onChange={(e) => {
               handelChange(e);
             }}
@@ -72,7 +72,7 @@ const Signup = () => {
         <InputGroup>
           <Input
             type={show ? 'text' : 'password'}
-            placeholder="Enter Your Name"
+            placeholder="Enter Your Password Again"
             onChange={(e) => {
               handelChange(e);
             }}
