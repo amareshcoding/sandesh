@@ -14,7 +14,9 @@ const Login = () => {
     email: '',
     password: '',
   });
+  console.log('loginCred: ', loginCred);
   const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(false);
   const handelChange = (e) => {
     const { name, value } = e.target;
     setLoginCred({
@@ -22,11 +24,13 @@ const Login = () => {
       [name]: value,
     });
   };
+  const submitHandler = () => {};
   return (
     <VStack spacing={'10px'} color="black">
       <FormControl id="email" isRequired>
         <Input
           type={'email'}
+          name="email"
           placeholder="Enter Your Email"
           onChange={(e) => {
             handelChange(e);
@@ -37,6 +41,7 @@ const Login = () => {
         <InputGroup>
           <Input
             type={show ? 'text' : 'password'}
+            name="password"
             placeholder="Enter Your Name"
             onChange={(e) => {
               handelChange(e);
@@ -56,12 +61,7 @@ const Login = () => {
         </InputGroup>
       </FormControl>
 
-      <Button
-        colorScheme="blue"
-        width={'100%'}
-        mt={10}
-        //  onClick={submitHandler}
-      >
+      <Button colorScheme="blue" width={'100%'} mt={10} onClick={submitHandler}>
         Submit
       </Button>
     </VStack>
