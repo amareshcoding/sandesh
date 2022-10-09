@@ -21,7 +21,6 @@ app.use('/api/user', userRouter);
 //chat
 app.use('/api/chat', chatRoute);
 
-
 //Error handeling
 app.use(notFound);
 app.use(errorHandler);
