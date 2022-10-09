@@ -3,7 +3,7 @@ const User = require('../models/user.model');
 
 const register = async (req, res) => {
   try {
-    const { name, email, password, pic } = req.body;
+    const { name, email, password, avtar } = req.body;
 
     if (!name || !email || !password) {
       res.status(400);
@@ -21,7 +21,7 @@ const register = async (req, res) => {
       name,
       email,
       password,
-      pic,
+      avtar,
     });
 
     if (user) {
@@ -29,7 +29,7 @@ const register = async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
-        pic: user.pic,
+        avtar: user.avtar,
         token: generateToken(user._id),
       });
     } else {
@@ -53,7 +53,7 @@ const login = async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
-        pic: user.pic,
+        avtar: user.avtar,
         token: generateToken(user._id),
       });
     } else {

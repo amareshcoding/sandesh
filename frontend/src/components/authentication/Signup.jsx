@@ -11,12 +11,12 @@ import {
 import React from 'react';
 import { useState } from 'react';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
   const toast = useToast();
-  const history = useHistory();
-  const [signupData, setSignUpdata] = useState({
+  const navigate = useNavigate();
+  const [signupCred, setSignUpcred] = useState({
     name: '',
     email: '',
     password: '',
@@ -29,8 +29,8 @@ const Signup = () => {
 
   const handelChange = (e) => {
     const { name, value } = e.target;
-    setSignUpdata({
-      ...signupData,
+    setSignUpcred({
+      ...signupCred,
       [name]: value,
     });
   };
@@ -57,7 +57,7 @@ const Signup = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          setSignUpdata({ ...signupData, avtar: data.url.toString() });
+          setSignUpcred({ ...signupCred, avtar: data.url.toString() });
           setLoading(false);
         })
         .catch((err) => {
@@ -75,13 +75,13 @@ const Signup = () => {
       return;
     }
   };
-  // console.log('signupData: ', signupData);
+
   const submitHandler = async () => {
     setLoading(true);
     if (
-      !signupData.name ||
-      !signupData.email ||
-      !signupData.password ||
+      !signupCred.name ||
+      !signupCred.email ||
+      !signupCred.password ||
       !confirmPass
     ) {
       toast({
@@ -94,7 +94,7 @@ const Signup = () => {
       setLoading(false);
       return;
     }
-    if (signupData.password !== confirmPass) {
+    if (signupCred.password !== confirmPass) {
       toast({
         title: 'Passwords Do not Match!',
         status: 'warning',
@@ -111,7 +111,11 @@ const Signup = () => {
           'Content-type': 'application/json',
         },
       };
-      const { data } = await axios.post('/api/user', signupData, config);
+      const { data } = await axios.post(
+        '/api/users/register',
+        signupCred,
+        config
+      );
       localStorage.setItem('userInfo', JSON.stringify(data));
       toast({
         title: 'Registration Successful!',
@@ -121,7 +125,7 @@ const Signup = () => {
         position: 'bottom',
       });
       setLoading(false);
-      history.push('/chats');
+      navigate('/chats');
     } catch (err) {
       toast({
         title: 'Error Occured!',

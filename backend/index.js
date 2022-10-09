@@ -1,7 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
-const { register, login } = require('./controllers/auth.controller');
 const userRouter = require('./routes/user.route');
 const { notFound, errorHandler } = require('./middleware/error.middleware');
 
@@ -10,17 +9,15 @@ const app = express();
 app.use(express.json());
 dotenv.config();
 
-//Authentication
-app.post('/register', register);
-app.post('/login', login);
+//home route
+app.get('/', (req, res) => {
+  res.send('home route');
+});
 
 //user
 app.use('/api/users', userRouter);
 
 //
-app.get('/', (req, res) => {
-  res.send('home route');
-});
 app.get('/api/chat', async (req, res) => {
   try {
     res.send('/api/chat route');
@@ -40,7 +37,6 @@ app.get('/api/chat/:id', async (req, res) => {
 //Error handeling
 app.use(notFound);
 app.use(errorHandler);
-
 
 //server listening
 const PORT = process.env.PORT || 8000;
