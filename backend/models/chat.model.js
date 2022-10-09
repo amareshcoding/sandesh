@@ -4,9 +4,9 @@ const chatSchema = new mongoose.Schema(
   {
     chatMane: { type: String, trim: true, required: true },
     isGroupChat: { type: Boolean, default: false },
-    userIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }],
+    user: [{ type: mongoose.Schema.Types.ObjectId, ref: 'chatuser' }],
     latestMessage: { type: mongoose.Schema.Types.ObjectId, ref: 'message' },
-    groupAdmins: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
+    groupAdmins: { type: mongoose.Schema.Types.ObjectId, ref: 'chatuser' },
   },
   {
     versionKey: false,
