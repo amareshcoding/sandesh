@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const userRouter = require('./routes/user.route');
 const { notFound, errorHandler } = require('./middleware/error.middleware');
+const chatRoute = require('./routes/chat.route');
 
 //app setup
 const app = express();
@@ -14,25 +15,12 @@ app.get('/', (req, res) => {
   res.send('home route');
 });
 
-//user
-app.use('/api/users', userRouter);
+//user and authentication
+app.use('/api/user', userRouter);
 
-//
-app.get('/api/chat', async (req, res) => {
-  try {
-    res.send('/api/chat route');
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
-});
+//chat
+app.use('/api/chat', chatRoute);
 
-app.get('/api/chat/:id', async (req, res) => {
-  try {
-    res.send('/api/chat//id route');
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
-});
 
 //Error handeling
 app.use(notFound);

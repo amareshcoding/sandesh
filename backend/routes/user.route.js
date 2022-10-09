@@ -1,5 +1,6 @@
 const Router = require('express');
 const { register, login } = require('../controllers/auth.controller');
+const authMiddleware = require('../middleware/auth.middleware');
 const User = require('../models/user.model');
 
 const userRouter = Router();
@@ -9,9 +10,21 @@ userRouter.post('/register', register);
 userRouter.post('/login', login);
 
 //genaral routes
-userRouter.get('/', async (req, res) => {
+userRouter.get('/', authMiddleware, async (req, res) => {
   try {
-    const user = await User.find().lean().exec();
+    const queries = req.query.search
+      ? {
+          $or: [
+            { name: { $regex: req.query.search, $options: 'i' } },
+            { email: { $regex: req.query.search, $options: 'i' } },
+          ],
+        }
+      : {};
+
+    const user = await User.find(queries)
+      .find({ _id: { $ne: req.user._id } })
+      .lean()
+      .exec();
     res.send(user);
   } catch (e) {
     res.status(500).send(e.message);
