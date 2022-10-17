@@ -106,16 +106,18 @@ const Signup = () => {
       return;
     }
     try {
+      console.log(signupCred);
       const config = {
         headers: {
           'Content-type': 'application/json',
         },
       };
       const { data } = await axios.post(
-        '/api/users/register',
+        'http://localhost:5000/api/user/register',
         signupCred,
         config
       );
+      console.log('data: ', data);
       localStorage.setItem('userInfo', JSON.stringify(data));
       toast({
         title: 'Registration Successful!',
@@ -125,7 +127,7 @@ const Signup = () => {
         position: 'bottom',
       });
       setLoading(false);
-      navigate('/chats');
+      // navigate('/chats');
     } catch (err) {
       toast({
         title: 'Error Occured!',
