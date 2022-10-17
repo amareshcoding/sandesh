@@ -1,5 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const cors = require('cors');
 const connectDB = require('./config/db');
 const userRouter = require('./routes/user.route');
 const { notFound, errorHandler } = require('./middleware/error.middleware');
@@ -7,6 +8,7 @@ const chatRoute = require('./routes/chat.route');
 
 //app setup
 const app = express();
+app.use(cors());
 app.use(express.json());
 dotenv.config();
 
