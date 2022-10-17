@@ -19,7 +19,6 @@ const Login = () => {
     email: '',
     password: '',
   });
-  console.log('loginCred: ', loginCred);
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
   const handelChange = (e) => {
@@ -48,7 +47,11 @@ const Login = () => {
           'Content-type': 'application/json',
         },
       };
-      const { data } = await axios.post('/api/users/login', loginCred, config);
+      const { data } = await axios.post(
+        'http://localhost:5000/api/user/login',
+        loginCred,
+        config
+      );
       localStorage.setItem('userInfo', JSON.stringify(data));
       toast({
         title: 'Registration Successful!',
