@@ -15,6 +15,7 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Spinner,
   Text,
   Toast,
   Tooltip,
@@ -65,7 +66,10 @@ const SideDrawer = () => {
         },
       };
 
-      const { data } = await axios.get(`/api/user?search=${search}`, config);
+      const { data } = await axios.get(
+        `http://localhost:5000/api/user?search=${search}`,
+        config
+      );
 
       setLoading(false);
       setSearchResult(data);
@@ -92,7 +96,13 @@ const SideDrawer = () => {
         },
       };
 
-      const { data } = await axios.post('/api/chat', { id }, config);
+      const { data } = await axios.post(
+        'http://localhost:5000/api/chat',
+        { id },
+        config
+      );
+
+      if (!chats.find((u) => u._id === data._id)) setChats([data, ...chats]);
 
       setSelectedChat(data);
       setLoadingChat(false);
@@ -188,14 +198,15 @@ const SideDrawer = () => {
                 />;
               })
             )}
+            {loadingChat ? <Spinner ml={'auto'} display="flex" /> : null}
           </DrawerBody>
 
-          <DrawerFooter>
+          {/* <DrawerFooter>
             <Button variant="outline" mr={3} onClick={onClose}>
               Cancel
             </Button>
             <Button colorScheme="blue">Save</Button>
-          </DrawerFooter>
+          </DrawerFooter> */}
           <DrawerCloseButton />
         </DrawerContent>
       </Drawer>
