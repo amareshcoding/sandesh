@@ -17,7 +17,6 @@ import {
   MenuList,
   Spinner,
   Text,
-  Toast,
   Tooltip,
   useDisclosure,
   useToast,
@@ -86,6 +85,7 @@ const SideDrawer = () => {
   };
 
   const accessChat = async (id) => {
+    console.log('id: ', id);
     try {
       setLoadingChat(true);
 
@@ -100,7 +100,7 @@ const SideDrawer = () => {
         'http://localhost:5000/api/chat',
         { id },
         config
-      );
+        );
 
       if (!chats.find((u) => u._id === data._id)) setChats([data, ...chats]);
 
@@ -191,11 +191,13 @@ const SideDrawer = () => {
               <ChatLoading />
             ) : (
               searchResult?.map((user) => {
-                <UserListItem
-                  key={user._id}
-                  user={user}
-                  handleFunction={() => accessChat(user._id)}
-                />;
+                return (
+                  <UserListItem
+                    key={user._id}
+                    user={user}
+                    handleFunction={() => accessChat(user._id)}
+                  />
+                );
               })
             )}
             {loadingChat ? <Spinner ml={'auto'} display="flex" /> : null}
