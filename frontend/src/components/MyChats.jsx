@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { getSender } from '../config/ChatLogics';
 import { ChatState } from '../context/ChatProvider';
 import ChatLoading from './ChatLoading';
+import GroupChatModal from './miscellaneous/GroupChatModal';
 
 const MyChats = () => {
   const [loggedUser, setLoogedUser] = useState();
@@ -44,7 +45,6 @@ const MyChats = () => {
     fetchChats();
   }, []);
 
- 
   return (
     <Box
       display={{ base: selectedChat ? 'none' : 'flex', md: 'flex' }}
@@ -67,13 +67,15 @@ const MyChats = () => {
         alignItems="center"
       >
         My Chats
-        <Button
-          display="flex"
-          fontSize={{ base: '17px', md: '10px', lg: '17px' }}
-          rightIcon={<AddIcon />}
-        >
-          New Group Chat
-        </Button>
+        <GroupChatModal>
+          <Button
+            display="flex"
+            fontSize={{ base: '17px', md: '10px', lg: '17px' }}
+            rightIcon={<AddIcon />}
+          >
+            New Group Chat
+          </Button>
+        </GroupChatModal>
       </Box>
 
       <Box
@@ -99,8 +101,10 @@ const MyChats = () => {
                 borderRadius="lg"
                 key={chat._id}
               >
-                <Text> 
-                  {!chat.isGroupChat? getSender( loggedUser, chat.users): chat.chatName}
+                <Text>
+                  {!chat.isGroupChat
+                    ? getSender(loggedUser, chat.users)
+                    : chat.chatName}
                 </Text>
               </Box>
             ))}

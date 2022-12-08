@@ -2,8 +2,7 @@ const Chat = require('../models/chat.model');
 const User = require('../models/user.model');
 
 const accessChat = async (req, res) => {
-  const { userId } = req.body;
-
+  const userId = req.body.id;
   if (!userId) {
     return res.sendStatus(400);
   }
@@ -19,8 +18,8 @@ const accessChat = async (req, res) => {
         },
       ],
     })
-      .populate('user', '-password')
-      .populate('latestMessage');
+    .populate('user', '-password')
+    .populate('latestMessage');
     isChatExist = await User.populate(isChatExist, {
       path: 'latestMessage.sender',
       select: 'name avtar email',
@@ -39,10 +38,12 @@ const accessChat = async (req, res) => {
       const getChat = await Chat.findOne({ _id: createChat._id }).populate(
         'user',
         '-password'
-      );
+        );
+        
       res.status(200).send(getChat);
     }
   } catch (err) {
+    console.log('err: ', err);
     res.status(500).send(err.message);
   }
 };
