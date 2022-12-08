@@ -65,10 +65,7 @@ const SideDrawer = () => {
         },
       };
 
-      const { data } = await axios.get(
-        `http://localhost:5000/api/user?search=${search}`,
-        config
-      );
+      const { data } = await axios.get(`/api/user?search=${search}`, config);
 
       setLoading(false);
       setSearchResult(data);
@@ -96,17 +93,13 @@ const SideDrawer = () => {
         },
       };
 
-      const { data } = await axios.post(
-        'http://localhost:5000/api/chat',
-        { id },
-        config
-        );
+      const { data } = await axios.post('/api/chat', { id }, config);
 
       if (!chats.find((u) => u._id === data._id)) setChats([data, ...chats]);
 
       setSelectedChat(data);
       setLoadingChat(false);
-      onclose();
+      onClose();
     } catch (err) {
       toast({
         title: 'Error in fetching the chat!',
@@ -130,7 +123,7 @@ const SideDrawer = () => {
       >
         <Tooltip label="Search User to Chat" hasArrow placement="bottom-end">
           <Button variant={'ghost'} onClick={onOpen}>
-            <i class="fas fa-search"></i>
+            <i className="fas fa-search"></i>
             <Text d={{ base: 'none', md: 'flex' }} px="4">
               Search User
             </Text>

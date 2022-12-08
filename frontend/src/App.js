@@ -1,8 +1,14 @@
 import './App.css';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import ChatPage from './pages/ChatPage';
+import { ChatState } from './context/ChatProvider';
 function App() {
+  const { user } = ChatState();
+  const navigate = useNavigate();
+  if (!user) {
+    navigate('/');
+  }
   return (
     <div className="App">
       <Routes>
