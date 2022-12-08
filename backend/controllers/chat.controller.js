@@ -11,15 +11,15 @@ const accessChat = async (req, res) => {
       isGroupChat: false,
       $and: [
         {
-          user: { $elemMatch: { $eq: req.user._id } },
+          users: { $elemMatch: { $eq: req.user._id } },
         },
         {
-          user: { $elemMatch: { $eq: userId } },
+          users: { $elemMatch: { $eq: userId } },
         },
       ],
     })
-    .populate('user', '-password')
-    .populate('latestMessage');
+      .populate('users', '-password')
+      .populate('latestMessage');
     isChatExist = await User.populate(isChatExist, {
       path: 'latestMessage.sender',
       select: 'name avtar email',
@@ -28,18 +28,18 @@ const accessChat = async (req, res) => {
       res.send(isChatExist[0]);
     } else {
       const newChat = {
-        chatMane: 'sender',
+        chatName: 'sender',
         isGroupChat: false,
-        user: [req.user._id, userId],
+        users: [req.user._id, userId],
       };
 
       const createChat = await Chat.create(newChat);
 
       const getChat = await Chat.findOne({ _id: createChat._id }).populate(
-        'user',
+        'users',
         '-password'
-        );
-        
+      );
+
       res.status(200).send(getChat);
     }
   } catch (err) {
@@ -50,10 +50,10 @@ const accessChat = async (req, res) => {
 const getAllChat = async (req, res) => {
   try {
     var allChats = await Chat.find({
-      user: { $elemMatch: { $eq: req.user._id } },
+      users: { $elemMatch: { $eq: req.user._id } },
     })
-      .populate('user', '-password')
-      .populate('groupAdmins', '-password')
+      .populate('users', '-password')
+      .populate('groupAdmin', '-password')
       .populate('latestMessage')
       .sort({ updatedAt: -1 });
     allChats = await User.populate(allChats, {
@@ -62,6 +62,7 @@ const getAllChat = async (req, res) => {
     });
     res.send(allChats);
   } catch (err) {
+    console.log('err: ', err);
     res.status(500).send(err.message);
   }
 };
@@ -82,12 +83,12 @@ const createGroupChat = async (req, res) => {
     const newGroupChat = await Chat.create({
       chatMane: req.body.name,
       isGroupChat: true,
-      user: users,
+      users: users,
       groupAdmin: req.user,
     });
 
     const groupDetails = await Chat.findOne({ _id: newGroupChat._id })
-      .populate('user', '-password')
+      .populate('users', '-password')
       .populate('groupAdmin', '-password');
     res.status(201).json(groupDetails);
   } catch (err) {
@@ -100,11 +101,11 @@ const addToGroup = async (req, res) => {
     const addOne = await Chat.findByIdAndUpdate(
       chatId,
       {
-        $push: { user: userId },
+        $push: { users: userId },
       },
       { new: true }
     )
-      .populate('user', '-password')
+      .populate('users', '-password')
       .populate('groupAdmin', '-password');
     if (!addOne) {
       res.status(404);
@@ -125,7 +126,7 @@ const renameGroup = async (req, res) => {
       { chatName },
       { new: true }
     )
-      .populate('user', '-password')
+      .populate('users', '-password')
       .populate('groupAdmin', '-password');
     if (!updatedChat) {
       res.status(404);
@@ -143,11 +144,11 @@ const removeFromGroup = async (req, res) => {
     const removeOne = await Chat.findByIdAndUpdate(
       chatId,
       {
-        $pull: { user: userId },
+        $pull: { users: userId },
       },
       { new: true }
     )
-      .populate('user', '-password')
+      .populate('users', '-password')
       .populate('groupAdmin', '-password');
     if (!removeOne) {
       res.status(404);
