@@ -9,7 +9,7 @@ import { ChatState } from '../context/ChatProvider';
 import ChatLoading from './ChatLoading';
 import GroupChatModal from './miscellaneous/GroupChatModal';
 
-const MyChats = () => {
+const MyChats = ({ fetchAgain }) => {
   const [loggedUser, setLoogedUser] = useState();
   const { user, selectedChat, setSelectedChat, chats, setChats } = ChatState();
 
@@ -27,7 +27,6 @@ const MyChats = () => {
         'http://localhost:5000/api/chat',
         config
       );
-      console.log('data: ', data);
       setChats(data);
     } catch (err) {
       toast({
@@ -44,11 +43,11 @@ const MyChats = () => {
   useEffect(() => {
     setLoogedUser(JSON.parse(localStorage.getItem('userInfo')));
     fetchChats();
-  }, []);
+  }, [fetchAgain]);
   // return <h1>my chat </h1>
   return (
     <Box
-      display={{ base: selectedChat ? 'none' : 'flex', md: 'flex' }}
+      display={{ base: selectedChat.length!==0 ? 'none' : 'flex', md: 'flex' }}
       flexDir="column"
       alignItems={'center'}
       p={3}

@@ -67,6 +67,7 @@ const getAllChat = async (req, res) => {
   }
 };
 const createGroupChat = async (req, res) => {
+  console.log('req.body.users : ', req.body.users );
   if (!req.body.users || !req.body.name) {
     return res.status(401).send({
       message: 'Please fill all the feilds',
@@ -81,7 +82,7 @@ const createGroupChat = async (req, res) => {
   users.push(req.user);
   try {
     const newGroupChat = await Chat.create({
-      chatMane: req.body.name,
+      chatName: req.body.name,
       isGroupChat: true,
       users: users,
       groupAdmin: req.user,

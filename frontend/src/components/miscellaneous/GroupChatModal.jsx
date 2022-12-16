@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   FormControl,
   Input,
@@ -16,6 +17,7 @@ import {
 import axios from 'axios';
 import React, { useState } from 'react';
 import { ChatState } from '../../context/ChatProvider';
+import UserBadgeItem from '../userItems/UserBadgeItem';
 import UserListItem from '../userItems/UserListItem';
 
 const GroupChatModal = ({ children }) => {
@@ -57,11 +59,70 @@ const GroupChatModal = ({ children }) => {
   };
 
   const hanleGroup = (user) => {
-    //
+    if (selectedUser.includes(user)) {
+      toast({
+        title: 'User Already Added!',
+        status: 'warning',
+        duration: 3000,
+        isClosable: true,
+        position: 'top',
+      });
+      return;
+    }
+    setSelectedUser([...selectedUser, user]);
   };
 
-  const handleSubmit = () => {
-    //
+  const handleDelete = (user) => {
+    const updatedUsers = selectedUser.filter((u) => u._id !== user._id);
+    setSelectedUser(updatedUsers);
+  };
+
+  const handleSubmit = async () => {
+    if (!groupChatName || !selectedUser) {
+      toast({
+        title: 'Please fill all the feilds!',
+        status: 'warning',
+        duration: 3000,
+        isClosable: true,
+        position: 'top',
+      });
+      return;
+    }
+    try {
+      const config = {
+        headers: {
+          'Content-type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+
+      const { data } = await axios.post(
+        ' http://localhost:5000/api/chat/group',
+        {
+          name: groupChatName,
+          users: JSON.stringify(selectedUser.map((u) => u._id)),
+        },
+        config
+      );
+      setChats([data, ...chats]);
+      onClose();
+      toast({
+        title: 'New Group Created!',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+        position: 'bottom',
+      });
+    } catch (err) {
+      toast({
+        title: 'Error in creating group chat!',
+        description: err.message,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        position: 'bottom',
+      });
+    }
   };
 
   return (
@@ -95,7 +156,15 @@ const GroupChatModal = ({ children }) => {
                 onChange={(e) => handleSearch(e.target.value)}
               />
             </FormControl>
-            {/* selected users */}
+            <Box w="100%" display="flex" flexWrap="wrap">
+              {selectedUser.map((user) => (
+                <UserBadgeItem
+                  key={user._id}
+                  user={user}
+                  handleFunction={() => handleDelete(user)}
+                />
+              ))}
+            </Box>
             {loading ? (
               <Spinner ml={'auto'} display="flex" />
             ) : (
