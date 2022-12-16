@@ -82,7 +82,6 @@ const SideDrawer = () => {
   };
 
   const accessChat = async (id) => {
-    console.log('id: ', id);
     try {
       setLoadingChat(true);
 
@@ -94,6 +93,7 @@ const SideDrawer = () => {
       };
 
       const { data } = await axios.post('/api/chat', { id }, config);
+      console.log('data: ', data);
 
       if (!chats.find((u) => u._id === data._id)) setChats([data, ...chats]);
 

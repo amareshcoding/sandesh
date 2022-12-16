@@ -26,7 +26,8 @@ const MyChats = () => {
       const { data } = await axios.get(
         'http://localhost:5000/api/chat',
         config
-        );
+      );
+      console.log('data: ', data);
       setChats(data);
     } catch (err) {
       toast({
@@ -44,7 +45,7 @@ const MyChats = () => {
     setLoogedUser(JSON.parse(localStorage.getItem('userInfo')));
     fetchChats();
   }, []);
-
+  // return <h1>my chat </h1>
   return (
     <Box
       display={{ base: selectedChat ? 'none' : 'flex', md: 'flex' }}
