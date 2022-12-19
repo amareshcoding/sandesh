@@ -6,17 +6,13 @@ const { notFound, errorHandler } = require('./middleware/error.middleware');
 const userRouter = require('./routes/user.route');
 const chatRoute = require('./routes/chat.route');
 const messageRoute = require('./routes/message.route');
+const path = require('path');
 
 //app setup
 const app = express();
 app.use(cors());
 app.use(express.json());
 dotenv.config();
-
-//home route
-app.get('/', (req, res) => {
-  res.send('home route');
-});
 
 //user and authentication
 app.use('/api/user', userRouter);
@@ -27,12 +23,28 @@ app.use('/api/chat', chatRoute);
 //message
 app.use('/api/message', messageRoute);
 
+//------------------Deployment--------------
+const __dirname1 = path.resolve();
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname1, '/frontend/build')));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname1, 'frontend', 'build', 'index.html'));
+  });
+} else {
+  //home route
+  app.get('/', (req, res) => {
+    res.send('home route');
+  });
+}
+//------------------Deployment--------------
+
 //Error handeling
 app.use(notFound);
 app.use(errorHandler);
 
 //server listening
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, async () => {
   try {
     connectDB();
@@ -43,7 +55,7 @@ const server = app.listen(PORT, async () => {
 });
 
 const io = require('socket.io')(server, {
-  pingTimeout: 6000,
+  pingTimeout: 60000,
   cors: {
     origin: 'http://localhost:3000',
   },
