@@ -29,6 +29,9 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ChatLoading from '../ChatLoading';
 import UserListItem from '../userItems/UserListItem';
+import { getSender } from '../../config/ChatLogics';
+import { Effect } from 'react-notification-badge';
+import NotificationBadge from 'react-notification-badge/lib/components/NotificationBadge';
 
 const SideDrawer = () => {
   const [search, setSearch] = useState('');
@@ -36,7 +39,14 @@ const SideDrawer = () => {
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState();
 
-  const { user, setSelectedChat, chats, setChats } = ChatState();
+  const {
+    user,
+    setSelectedChat,
+    chats,
+    setChats,
+    notification,
+    setNotification,
+  } = ChatState();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
 
@@ -137,7 +147,26 @@ const SideDrawer = () => {
             <MenuButton p={1}>
               <BellIcon fontSize={'2xl'} m={1} />
             </MenuButton>
-            {}
+            <MenuList pl={2}>
+              <NotificationBadge
+                count={notification.length}
+                effect={Effect.SCALE}
+              />
+              {!notification.length && 'No New Messages'}
+              {notification.map((nf) => (
+                <MenuItem
+                  key={nf._id}
+                  onClick={() => {
+                    setSelectedChat(nf.chat);
+                    setNotification(notification.filter((n) => n !== nf));
+                  }}
+                >
+                  {nf.chat.isGroupChat
+                    ? `New message in ${nf.chat.chatName}`
+                    : `New Message from ${getSender(user, nf.chat.users)}`}
+                </MenuItem>
+              ))}
+            </MenuList>
           </Menu>
           <Menu>
             <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
