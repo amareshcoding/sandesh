@@ -97,7 +97,7 @@ const GroupChatModal = ({ children }) => {
       };
 
       const { data } = await axios.post(
-        ' http://localhost:5000/api/chat/group',
+        'https://mern-chat-app-b9cl.onrender.com/api/chat/group',
         {
           name: groupChatName,
           users: JSON.stringify(selectedUser.map((u) => u._id)),

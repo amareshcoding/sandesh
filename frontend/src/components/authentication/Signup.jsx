@@ -113,7 +113,7 @@ const Signup = () => {
         },
       };
       const { data } = await axios.post(
-        'http://localhost:5000/api/user/register',
+        'https://mern-chat-app-b9cl.onrender.com/api/user/register',
         signupCred,
         config
       );

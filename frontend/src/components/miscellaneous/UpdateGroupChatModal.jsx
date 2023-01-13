@@ -58,7 +58,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
       };
 
       const { data } = await axios.put(
-        'http://localhost:5000/api/chat/group/remove',
+        'https://mern-chat-app-b9cl.onrender.com/api/chat/group/remove',
         { chatId: selectedChat._id, userId: userToRemove._id },
         config
       );
@@ -93,7 +93,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
       };
 
       const { data } = await axios.put(
-        ' http://localhost:5000/api/chat/group/rename',
+        'https://mern-chat-app-b9cl.onrender.com/api/chat/group/rename',
         {
           chatId: selectedChat._id,
           chatName: groupChatName,
@@ -177,7 +177,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
       };
 
       const { data } = await axios.put(
-        'http://localhost:5000/api/chat/group/add',
+        'https://mern-chat-app-b9cl.onrender.com/api/chat/group/add',
         { chatId: selectedChat._id, userId: userToAdd._id },
         config
       );
