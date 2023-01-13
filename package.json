@@ -4,8 +4,7 @@
   "description": "its a mern app using express react mongo chakre ui",
   "main": "index.js",
   "scripts": {
-    "build":"frontend npm run build",
-    "start": "node backend/index.js",
+    "start": "frontend npm run build && node backend/index.js",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
   },
   "author": "Amaresh Barik",
