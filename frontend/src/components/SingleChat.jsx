@@ -21,7 +21,7 @@ import Lottie from 'react-lottie';
 import './styles.css';
 import animationData from '../animations/typing.json';
 
-const ENDPOINT = 'http://localhost:5000';
+const ENDPOINT = 'https://mern-chat-app-b9cl.onrender.com/';
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
@@ -57,7 +57,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       setLoading(true);
       console.log('here');
       const { data } = await axios.get(
-        `http://localhost:5000/api/message/${selectedChat._id}`,
+        `https://mern-chat-app-b9cl.onrender.com/api/message/${selectedChat._id}`,
         config
       );
       setMessages(data);
@@ -117,7 +117,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
         setNewMessages('');
         const { data } = await axios.post(
-          'http://localhost:5000/api/message',
+          'https://mern-chat-app-b9cl.onrender.com/api/message',
           {
             content: newMeaasge,
             chatId: selectedChat._id,
